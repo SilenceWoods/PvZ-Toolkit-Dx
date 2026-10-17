@@ -1,0 +1,77 @@
+#ifdef _MSC_VER
+#pragma code_page(65001) // UTF-8
+#endif
+
+// ---------------------------------------------------------------------------
+// Resource script for the Dear ImGui frontend (pztk_imgui.exe).
+//
+// The icon deliberately reuses tool-src/res/logo.ico -- the very same file the
+// FLTK build (tool-src/res/version.rc) embeds.  No new artwork is introduced.
+//
+// This file is compiled by env/scripts/build_imgui_demo.cmd with
+//   windres --codepage=65001 -O coff
+// run from tool-src/res, so the ICON path below stays relative to the directory
+// that actually holds logo.ico.
+//
+// Keep this file UTF-8 without BOM (the FLTK resource script is the same), and
+// keep it free of a MANIFEST statement: GCC's linker spec always pulls in
+//   %:if-exists(default-manifest.o%s)
+// i.e. the toolchain's own default-manifest.o (installed by
+// env/scripts/build_toolkit.cmd with activeCodePage=UTF-8).  Embedding a second
+// manifest here would abort the link with
+//   ".rsrc merge failure: multiple non-default manifests".
+// ---------------------------------------------------------------------------
+
+#define IDI_ICON 1001
+
+#include <Windows.h>
+
+#include "../inc/version.h"
+
+IDI_ICON ICON DISCARDABLE "logo.ico"
+
+VS_VERSION_INFO VERSIONINFO
+    FILEVERSION VERSION_VER
+    PRODUCTVERSION VERSION_VER
+    FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+    FILEFLAGS VS_FF_DEBUG
+#else
+    FILEFLAGS 0x0L
+#endif
+    FILEOS VOS_NT_WINDOWS32
+    FILETYPE VFT_APP
+    FILESUBTYPE 0x0L
+    BEGIN
+        BLOCK "StringFileInfo"
+        BEGIN
+#ifdef _PTK_CHINESE_UI
+            BLOCK "080404B0"
+#else
+            BLOCK "040904B0"
+#endif
+            BEGIN
+#ifdef _PTK_CHINESE_UI
+                VALUE "CompanyName", "SilenceWoods"
+                VALUE "FileDescription", "植物大战僵尸辅助工具"
+#else
+                VALUE "CompanyName", "SilenceWoods"
+                VALUE "FileDescription", "Plants vs. Zombies Tool Kit"
+#endif
+                VALUE "FileVersion", VERSION_NAME_FULL
+                VALUE "InternalName", "pztk_imgui"
+                VALUE "LegalCopyright", "(C) 2020 - 2024 lmintlcx / 修改版 (C) 2026 SilenceWoods"
+                VALUE "OriginalFilename", "pztk_imgui.exe"
+                VALUE "ProductName", "PvZ Toolkit Dx"
+                VALUE "ProductVersion", VERSION_NAME_FULL
+            END
+        END
+        BLOCK "VarFileInfo"
+        BEGIN
+#ifdef _PTK_CHINESE_UI
+            VALUE "Translation", 0x0804, 1200
+#else
+            VALUE "Translation", 0x0409, 1200
+#endif
+        END
+    END
