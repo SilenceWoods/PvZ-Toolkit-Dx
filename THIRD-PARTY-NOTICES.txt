@@ -1,0 +1,540 @@
+================================================================================
+PvZ Toolkit Dx —— 第三方组件与许可说明 (THIRD-PARTY-NOTICES)
+================================================================================
+
+本项目 PvZ Toolkit Dx 基于 PvZ Toolkit（原作者 lmintlcx，GPL-3.0，
+https://github.com/lmintlcx/pvztoolkit）；本修改版由 SilenceWoods 维护，
+并同样以 GNU GPL-3.0 发布（全文见仓库根目录的 LICENSE）。
+再发布必须保留原作者署名、以 GPL-3.0 继续开源并提供完整对应源码。
+
+本文件列出本项目用到的第三方组件、各自的用途、许可名称、版权行，以及
+**仓库内该许可全文所在的位置**（下文路径都相对仓库根目录）。
+除"待确认"两条外，本文中的许可文本都是从仓库里的许可文件**原样摘录**的。
+
+本仓库有两个可执行目标，用到的组件并不完全相同：
+
+  * pztk_imgui.exe   —— 现行主程序（Dear ImGui + GLFW + OpenGL3）
+                        构建：env/scripts/build_imgui_demo.cmd
+  * pztk_hook.dll    —— 注入 DLL（MinHook）
+                        构建：env/scripts/build_hook_dll.cmd
+  * pvztoolkit.exe   —— 旧版 FLTK 前端
+                        构建：env/scripts/build_toolkit.cmd
+                        （本仓库的构建脚本已不再担保它的哈希，见 BUILD.md）
+
+"用于"一栏里的 M 表示 pztk_imgui.exe，H 表示 pztk_hook.dll，
+F 表示 pvztoolkit.exe。
+
+
+================================================================================
+1. 组件总表
+================================================================================
+
+| # | 组件 | 版本 | 许可 | 用于 | 许可全文出处（仓库内路径） |
+|---|------|------|------|------|----------------------------|
+| 1 | Dear ImGui（docking 分支） | 1.91.8 | MIT | M | env/src/imgui-1.91.8-docking/LICENSE.txt |
+| 2 | GLFW | 3.4 | zlib/libpng | M | env/src/glfw-3.4/LICENSE.md |
+| 3 | imgl3w / gl3w OpenGL 载入器 | 随 ImGui 1.91.8 | The Unlicense（公有领域） | M | env/src/imgui-1.91.8-docking/backends/imgui_impl_opengl3_loader.h:28-54 |
+| 4 | Khronos OpenGL 头（glcorearb 部分） | 随 ImGui 1.91.8 | MIT | M | env/src/imgui-1.91.8-docking/backends/imgui_impl_opengl3_loader.h:92-100 |
+| 5 | MinHook | 随仓库源码 | BSD-2-Clause | H | tool-src/hook/minhook/hook.cpp:1-27（另见 buffer.h / MinHook.h / trampoline.h / pstdint.h） |
+| 6 | HDE 32（Hacker Disassembler Engine 32） | 随 MinHook | **（待确认）** —— 文件头只有版权行，没有条款 | H | tool-src/hook/minhook/hde32.cpp:1-6、hde32.h、table32.h |
+| 7 | zlib（FLTK 自带的那一份，库名 libfltk_z.a） | 1.3.1 | zlib license | M、F | env/src/fltk-1.4.5/zlib/README:84-105（另见 zlib/zlib.h:4） |
+| 8 | FLTK | 1.4.5 | LGPL（GNU Library GPL v2）+ 静态链接例外 | F；M 只用了它自带的 zlib | env/src/fltk-1.4.5/COPYING |
+| 9 | libpng（FLTK 自带） | 随 FLTK 1.4.5 | PNG Reference Library License version 2 | F | env/src/fltk-1.4.5/png/LICENSE |
+| 10 | libjpeg（FLTK 自带的 IJG 版） | 随 FLTK 1.4.5 | IJG license | F | env/src/fltk-1.4.5/jpeg/README:112-141 |
+| 11 | MinGW-w64 / GCC 运行库（libgcc、libstdc++ 等） | GCC 16.2.0 / MinGW-w64 14.0.0 | **（待确认）** —— 工具链副本里没有许可文件 | M、H、F（静态链接） | 见第 12 节"待确认" |
+
+注：第 8 行的 "F" 指 pvztoolkit.exe 静态链接了 fltk::fltk / fltk::images /
+fltk::jpeg / fltk::png / fltk::z（见 tool-src/CMakeLists.txt:46-49、:98-101）。
+pztk_imgui.exe 只链接其中的 zlib（build_imgui_demo.cmd 的 -lfltk_z）。
+
+
+================================================================================
+2. Dear ImGui 1.91.8（docking 分支）—— MIT
+================================================================================
+用于：pztk_imgui.exe 的全部界面与两个后端
+      （imgui.cpp / imgui_draw.cpp / imgui_tables.cpp / imgui_widgets.cpp /
+        backends/imgui_impl_glfw.cpp / backends/imgui_impl_opengl3.cpp）
+许可：MIT License
+版权行：Copyright (c) 2014-2025 Omar Cornut
+出处：env/src/imgui-1.91.8-docking/LICENSE.txt
+      （同一份文件也在 env/src/imgui-1.91.8/LICENSE.txt；本项目只用 docking 分支）
+
+原样摘录（env/src/imgui-1.91.8-docking/LICENSE.txt 全文）：
+
+The MIT License (MIT)
+
+Copyright (c) 2014-2025 Omar Cornut
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+================================================================================
+3. GLFW 3.4 —— zlib/libpng
+================================================================================
+用于：pztk_imgui.exe 的窗口 / 输入 / OpenGL 上下文（-lglfw3）
+许可：zlib/libpng license
+版权行：Copyright (c) 2002-2006 Marcus Geelnard
+        Copyright (c) 2006-2019 Camilla Löwy
+出处：env/src/glfw-3.4/LICENSE.md
+
+原样摘录（env/src/glfw-3.4/LICENSE.md 全文）：
+
+Copyright (c) 2002-2006 Marcus Geelnard
+
+Copyright (c) 2006-2019 Camilla Löwy
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would
+   be appreciated but is not required.
+
+2. Altered source versions must be plainly marked as such, and must not
+   be misrepresented as being the original software.
+
+3. This notice may not be removed or altered from any source
+   distribution.
+
+
+================================================================================
+4. imgl3w / gl3w OpenGL 载入器 —— The Unlicense（公有领域）
+================================================================================
+用于：pztk_imgui.exe 内的 OpenGL 函数载入
+      （imgui_impl_opengl3_loader.h 被 imgui_impl_opengl3.cpp 直接包含并编入）
+许可：The Unlicense（"free and unencumbered software released into the
+      public domain"）
+版权行：文件里没有署名，只有弃权声明（作者把版权利益让渡给公有领域）
+出处：env/src/imgui-1.91.8-docking/backends/imgui_impl_opengl3_loader.h:28-54
+      （文件头另注明它由 gl3w_gen.py 生成，上游是
+        https://github.com/dearimgui/gl3w_stripped ）
+
+原样摘录（该文件 28-54 行）：
+
+/*
+ * This file was generated with gl3w_gen.py, part of imgl3w
+ * (hosted at https://github.com/dearimgui/gl3w_stripped)
+ *
+ * This is free and unencumbered software released into the public domain.
+ *
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a compiled
+ * binary, for any purpose, commercial or non-commercial, and by any
+ * means.
+ *
+ * In jurisdictions that recognize copyright laws, the author or authors
+ * of this software dedicate any and all copyright interest in the
+ * software to the public domain. We make this dedication for the benefit
+ * of the public at large and to the detriment of our heirs and
+ * successors. We intend this dedication to be an overt act of
+ * relinquishment in perpetuity of all present and future rights to this
+ * software under copyright law.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+
+================================================================================
+5. Khronos OpenGL 头（glcorearb 部分）—— MIT
+================================================================================
+用于：同一个 imgui_impl_opengl3_loader.h 里的 GL 常量 / 函数指针声明
+      （该文件 92 行起标注 SPDX-License-Identifier: MIT）
+许可：MIT
+版权行：Copyright 2013-2020 The Khronos Group Inc.
+出处：env/src/imgui-1.91.8-docking/backends/imgui_impl_opengl3_loader.h:92-100
+      MIT 正文与第 2 节 Dear ImGui 的 MIT 正文一致，此处不再重复抄写；
+      如需要全文，见 https://github.com/KhronosGroup/OpenGL-Registry
+
+原样摘录（该文件 92-100 行）：
+
+/*
+** Copyright 2013-2020 The Khronos Group Inc.
+** SPDX-License-Identifier: MIT
+**
+** This header is generated from the Khronos OpenGL / OpenGL ES XML
+** API Registry. The current version of the Registry, generator scripts
+** used to make the header, and the header can be found at
+**   https://github.com/KhronosGroup/OpenGL-Registry
+*/
+
+
+================================================================================
+6. MinHook —— BSD-2-Clause
+================================================================================
+用于：pztk_hook.dll 的 API Hook（tool-src/hook/minhook/ 下的
+      hook.cpp / buffer.cpp / trampoline.cpp 与各自头文件、MinHook.h、pstdint.h）
+许可：BSD 2-Clause "Simplified" License
+版权行：Copyright (C) 2009-2017 Tsuda Kageyu.
+出处：tool-src/hook/minhook/hook.cpp:1-27
+      （同样的条款逐字出现在 buffer.cpp / buffer.h / MinHook.h /
+        trampoline.cpp / trampoline.h / hook.cpp 的文件头；
+        pstdint.h:1-25 是同一份 BSD-2-Clause，只是措辞用 "THE AUTHOR"）
+      仓库里**没有**单独的 MinHook LICENSE 文件 —— 条款就在这些源码头里。
+
+原样摘录（tool-src/hook/minhook/hook.cpp:1-27）：
+
+/*
+ *  MinHook - The Minimalistic API Hooking Library for x64/x86
+ *  Copyright (C) 2009-2017 Tsuda Kageyu.
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *   1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *   2. Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ *  TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ *  PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER
+ *  OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ *  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ *  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
+================================================================================
+7. HDE 32（Hacker Disassembler Engine 32）—— （待确认）
+================================================================================
+用于：pztk_hook.dll 的指令长度反汇编（MinHook 用它定位可改写的指令边界）
+      tool-src/hook/minhook/hde32.cpp、hde32.h、table32.h
+许可：**（待确认）**
+版权行：Copyright (c) 2008-2009, Vyacheslav Patkov.
+        All rights reserved.
+出处：tool-src/hook/minhook/hde32.cpp:1-6（hde32.h、table32.h 同）
+说明：这三个文件只写了上面那句版权 + "All rights reserved."，
+      **没有**附任何许可条款正文，仓库里也没有 HDE 的 LICENSE/COPYING。
+      因此本条是"待确认"，不能凭记忆替它认定许可名称。
+      查过的路径见第 12 节。
+
+原样摘录（tool-src/hook/minhook/hde32.cpp:1-6）：
+
+/*
+ * Hacker Disassembler Engine 32 C
+ * Copyright (c) 2008-2009, Vyacheslav Patkov.
+ * All rights reserved.
+ *
+ */
+
+
+================================================================================
+8. zlib 1.3.1（FLTK 自带的那一份）—— zlib license
+================================================================================
+用于：pztk_imgui.exe 与 pvztoolkit.exe 的 .zbl / PAK 压缩数据 crc32、
+      以及 FLTK 自身的 PNG 解码。库文件是 env/fltk32/lib/libfltk_z.a
+      （符号带 fltk_z_ 前缀，由 zconf.h 宏映射）。
+      源码同时被 pztk_imgui.exe 以头文件形式包含：imgui_main.cpp 里的
+      #include <FL/images/zlib.h>
+许可：zlib license
+版权行：(C) 1995-2024 Jean-loup Gailly and Mark Adler
+出处：env/src/fltk-1.4.5/zlib/README:84-105
+      （zlib/zlib.h:4 是同一句版权行；zlib.h:40 写有
+        #define ZLIB_VERSION "1.3.1"）
+
+原样摘录（env/src/fltk-1.4.5/zlib/README:84-105）：
+
+Copyright notice:
+
+ (C) 1995-2024 Jean-loup Gailly and Mark Adler
+
+  This software is provided 'as-is', without any express or implied
+  warranty.  In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+  Jean-loup Gailly        Mark Adler
+  jloup@gzip.org          madler@alumni.caltech.edu
+
+
+================================================================================
+9. FLTK 1.4.5 —— LGPL + 静态链接例外
+================================================================================
+用于：pvztoolkit.exe（旧版前端）整体界面与图像解码；
+      pztk_imgui.exe 只链接了它自带的 zlib（libfltk_z.a），没有链接 FLTK 本体。
+许可：GNU Library General Public License（LGPL）version 2, June 1991，
+      另加 FLTK 自己的 4 条例外（其中第 3 条明确允许静态链接而不构成
+      衍生作品）。
+版权行：Copyright 1998-2026 by Bill Spitzak and others
+        （见 env/src/fltk-1.4.5/CMakeLists.txt:5、configure.ac:6；
+          另见 documentation/copyright.dox.in）
+出处：env/src/fltk-1.4.5/COPYING（第 1-45 行是 FLTK License 与 4 条例外，
+      第 47 行起是 LGPL v2 全文；同一份内容也在
+      documentation/src/license.dox）
+
+★ FLTK 许可第 4 条要求程序"仍然要声明自己用了 FLTK"，照 COPYING 里给的
+  示例句式声明如下：
+      PvZ Toolkit Dx (pvztoolkit.exe) is based in part on the work of
+      the FLTK project (https://www.fltk.org).
+
+原样摘录（env/src/fltk-1.4.5/COPYING:1-45，即例外部分；LGPL 正文请见该文件）：
+
+                             FLTK License
+                           December 11, 2001
+
+The FLTK library and included programs are provided under the terms
+of the GNU Library General Public License (LGPL) with the following
+exceptions:
+
+    1. Modifications to the FLTK configure script, config
+       header file, and makefiles by themselves to support
+       a specific platform do not constitute a modified or
+       derivative work.
+
+      The authors do request that such modifications be
+      contributed to the FLTK project - send all contributions
+      through the "Software Trouble Report" on the following page:
+
+           https://www.fltk.org/bugs.php
+
+    2. Widgets that are subclassed from FLTK widgets do not
+       constitute a derivative work.
+
+    3. Static linking of applications and widgets to the
+       FLTK library does not constitute a derivative work
+       and does not require the author to provide source
+       code for the application or widget, use the shared
+       FLTK libraries, or link their applications or
+       widgets against a user-supplied version of FLTK.
+
+       If you link the application or widget to a modified
+       version of FLTK, then the changes to FLTK must be
+       provided under the terms of the LGPL in sections
+       1, 2, and 4.
+
+    4. You do not have to provide a copy of the FLTK license
+       with programs that are linked to the FLTK library, nor
+       do you have to identify the FLTK license in your
+       program or documentation as required by section 6
+       of the LGPL.
+
+       However, programs must still identify their use of FLTK.
+       The following example statement can be included in user
+       documentation to satisfy this requirement:
+
+           [program/widget] is based in part on the work of
+           the FLTK project (https://www.fltk.org).
+
+-----------------------------------------------------------------------
+
+		  GNU LIBRARY GENERAL PUBLIC LICENSE
+			 Version 2, June 1991
+
+	  Copyright (C) 1991 Free Software Foundation, Inc.
+       59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+     Everyone is permitted to copy and distribute verbatim copies
+      of this license document, but changing it is not allowed.
+
+    [This is the first released version of the library GPL.  It is
+   numbered 2 because it goes with version 2 of the ordinary GPL.]
+
+
+================================================================================
+10. libpng（FLTK 自带）—— PNG Reference Library License version 2
+================================================================================
+用于：pvztoolkit.exe（FLTK 的 PNG 图像解码，libfltk_png.a）
+许可：PNG Reference Library License version 2
+版权行：Copyright (c) 1995-2024 The PNG Reference Library Authors.
+        Copyright (c) 2018-2024 Cosmin Truta.
+        Copyright (c) 2000-2002, 2004, 2006-2018 Glenn Randers-Pehrson.
+        Copyright (c) 1996-1997 Andreas Dilger.
+        Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.
+出处：env/src/fltk-1.4.5/png/LICENSE（该文件同时收录 version 2 与
+      version 1 两套条款，共 134 行）
+
+原样摘录（env/src/fltk-1.4.5/png/LICENSE:1-36）：
+
+COPYRIGHT NOTICE, DISCLAIMER, and LICENSE
+=========================================
+
+PNG Reference Library License version 2
+---------------------------------------
+
+ * Copyright (c) 1995-2024 The PNG Reference Library Authors.
+ * Copyright (c) 2018-2024 Cosmin Truta.
+ * Copyright (c) 2000-2002, 2004, 2006-2018 Glenn Randers-Pehrson.
+ * Copyright (c) 1996-1997 Andreas Dilger.
+ * Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.
+
+The software is supplied "as is", without warranty of any kind,
+express or implied, including, without limitation, the warranties
+of merchantability, fitness for a particular purpose, title, and
+non-infringement.  In no event shall the Copyright owners, or
+anyone distributing the software, be liable for any damages or
+other liability, whether in contract, tort or otherwise, arising
+from, out of, or in connection with the software, or the use or
+other dealings in the software, even if advised of the possibility
+of such damage.
+
+Permission is hereby granted to use, copy, modify, and distribute
+this software, or portions hereof, for any purpose, without fee,
+subject to the following restrictions:
+
+ 1. The origin of this software must not be misrepresented; you
+    must not claim that you wrote the original software.  If you
+    use this software in a product, an acknowledgment in the product
+    documentation would be appreciated, but is not required.
+
+ 2. Altered source versions must be plainly marked as such, and must
+    not be misrepresented as being the original software.
+
+ 3. This Copyright notice may not be removed or altered from any
+    source or altered source distribution.
+
+
+================================================================================
+11. libjpeg（FLTK 自带的 IJG 版）—— IJG license
+================================================================================
+用于：pvztoolkit.exe（FLTK 的 JPEG 图像解码，libfltk_jpeg.a）
+许可：IJG license（Independent JPEG Group）
+版权行：This software is copyright (C) 1991-2024, Thomas G. Lane,
+        Guido Vollbeding.
+出处：env/src/fltk-1.4.5/jpeg/README:112-141（"LEGAL ISSUES" 一节）
+
+★ IJG 条款第 (2) 条要求"只分发可执行文件时，随附文档必须声明本软件部分
+  基于 Independent JPEG Group 的工作"，按原文照录如下：
+      pvztoolkit.exe is based in part on the work of the Independent
+      JPEG Group.
+
+原样摘录（env/src/fltk-1.4.5/jpeg/README:112-141）：
+
+In legalese:
+
+The authors make NO WARRANTY or representation, either express or implied,
+with respect to this software, its quality, accuracy, merchantability, or
+fitness for a particular purpose.  This software is provided "AS IS", and you,
+its user, assume the entire risk as to its quality and accuracy.
+
+This software is copyright (C) 1991-2024, Thomas G. Lane, Guido Vollbeding.
+All Rights Reserved except as specified below.
+
+Permission is hereby granted to use, copy, modify, and distribute this
+software (or portions thereof) for any purpose, without fee, subject to these
+conditions:
+(1) If any part of the source code for this software is distributed, then this
+README file must be included, with this copyright and no-warranty notice
+unaltered; and any additions, deletions, or changes to the original files
+must be clearly indicated in accompanying documentation.
+(2) If only executable code is distributed, then the accompanying
+documentation must state that "this software is based in part on the work of
+the Independent JPEG Group".
+(3) Permission for use of this software is granted only if the user accepts
+full responsibility for any undesirable consequences; the authors accept
+NO LIABILITY for damages of any kind.
+
+These conditions apply to any software derived from or based on the IJG code,
+not just to the unmodified library.  If you use our work, you ought to
+acknowledge us.
+
+Permission is NOT granted for the use of any IJG author's name or company name
+in advertising or publicity relating to this software or products derived from
+
+
+================================================================================
+12. "待确认"清单（查过哪些路径）
+================================================================================
+
+(a) HDE 32（Hacker Disassembler Engine 32），第 7 节
+    查过：
+      * tool-src/hook/minhook/hde32.cpp:1-6   —— 只有版权行，无条款
+      * tool-src/hook/minhook/hde32.h:1-10    —— 同上
+      * tool-src/hook/minhook/table32.h:1-6   —— 同上
+      * 全仓库搜索名为 LICENSE / LICENSE.* / LICENCE / COPYING /
+        COPYING.* / NOTICE 的文件，tool-src/hook/ 下**一个都没有**
+      * tool-src/hook/minhook/ 目录列表：只有 .cpp / .h 源码，没有许可文件
+    结论：许可名称与条款正文在仓库里查不到 —— 需向上游 MinHook / HDE 项目
+          确认后再补全此条。
+
+(b) MinGW-w64 / GCC 运行库（静态链入三个产物），第 11 行总表
+    查过：
+      * env/mingw32/ 根目录列表：bin、i686-w64-mingw32、include、lib、
+        libexec、share、mingwvars.bat、version_info.txt —— **没有**许可文件
+      * 通配搜索 env/mingw32/**/COPYING*  → 0 个结果
+      * 通配搜索 env/mingw32/**/*icen*   → 只有
+        env/mingw32/share/cmake-4.4/Templates/CPack.GenericLicense.txt
+        （那是 CMake 自己的模板，与本项目无关）
+      * env/mingw32/version_info.txt —— 只说明这是 winlibs personal build
+        gcc-16.2.0-mingw-w64msvcrt-14.0.0-r2（GCC 16.2.0 / MinGW-w64 14.0.0），
+        没有许可信息
+    结论：工具链副本被裁剪掉了许可文件，本机查不到 —— 需从 winlibs 发行包
+          或 GCC / MinGW-w64 官方仓库确认后再补全此条。
+    链接方式（可自行核对）：env/scripts/build_imgui_demo.cmd 的
+      -static -static-libgcc -static-libstdc++；
+      pztk_imgui.exe 的导入表里没有 libstdc++-6.dll / libgcc_s_dw2-1.dll，
+      说明这两个运行库是静态链进去的。
+
+
+================================================================================
+13. 运行时依赖（随系统提供，本项目不分发）
+================================================================================
+以下东西被调用但**不在**本仓库/发布包里，因此不涉及再分发：
+
+  * Windows 系统库：kernel32 / user32 / gdi32 / advapi32 / ole32 /
+    shell32 / comdlg32 / winmm / crypt32 / wintrust / dwmapi / shcore /
+    msvcrt 等（链接命令见 env/scripts/build_imgui_demo.cmd）
+  * OpenGL：opengl32.dll（系统实现），GLFW 另外会在运行时按需尝试
+    egl.dll / libEGL.dll / vulkan-1.dll 等（名字以字符串形式留在
+    glfw3.a 里，找不到就跳过）
+  * 字体：界面用的是系统自带的微软雅黑 msyh.ttc，运行时从系统目录读取，
+    没有把字体文件打进 exe，也没有随包分发
+  * 游戏本体：Plants vs. Zombies（PopCap）—— 本工具只读写其内存，不包含
+    也不分发任何游戏文件
+
+
+================================================================================
+14. 本文件的两个副本
+================================================================================
+本文件在仓库里有两个**内容相同**的副本：
+
+  * 仓库根：THIRD-PARTY-NOTICES.txt（供工作区 / 本地构建使用）
+  * 可上传源码包根：github-src/PvZ-Toolkit-Dx/THIRD-PARTY-NOTICES.txt
+
+改动其中一份时，请把另一份同步成逐字节相同的副本。
